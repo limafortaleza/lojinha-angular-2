@@ -1,0 +1,25 @@
+<div class="card h-100 shadow-sm">
+  <img
+    [src]="produto?.image"
+    class="card-img-top p-3"
+    [alt]="produto?.title"
+    style="height: 200px; object-fit: contain"
+  />
+  <div class="card-body d-flex flex-column">
+    <h5 class="card-title">{{ produto?.title | uppercase }}</h5>
+    <!-- IF DA PORCENTAGEM -->
+    @if ((produto?.price || 0) > 100) {
+      <h6 style="text-decoration:line-through">{{ produto?.price | currency: 'BRL' }}</h6>
+      <span style="font-weight: bold"> Com 15% OFF</span>
+      <h6 [ngStyle]="{ color: 'red' }">{{ produto?.price | discount:15 | currency: 'BRL' }}</h6>
+    } @else {
+      <h6 [ngStyle]="{ color: 'green' }">{{ produto?.price | currency: 'BRL' }}</h6>
+    }
+    <p class="card-text">
+      <span style="font-weight: bold">Descrição:</span>{{ produto?.description | truncate: 100 }}
+    </p>
+    <button type="button" (click)="clicouComprar()" class="btn btn-primary w-100">
+      Adicionar ao carrinho
+    </button>
+  </div>
+</div>

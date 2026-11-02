@@ -1,0 +1,36 @@
+<header class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+    <!-- Título / Logo da Loja -->
+    <a class="navbar-brand fw-bold fs-4" href="#">Minha Loja</a>
+
+    <!-- Botão de menu (Hamburguer) para dispositivos móveis -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#menuNavegacao"
+      aria-controls="menuNavegacao"
+      aria-expanded="false"
+      aria-label="Alternar navegação"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <nav class="collapse navbar-collapse" id="menuNavegacao">
+      <!-- Links -->
+      <div class="navbar-nav me-auto mb-2 mb-lg-0">
+        <a class="nav-link active" aria-current="page" href="#">Início</a>
+        <a class="nav-link" href="#">Produtos</a>
+        <a class="nav-link" href="#">Sobre nós</a>
+      </div>
+
+      <div class="d-flex align-items-center">
+        @if (cartService.obterQuantidade() > 0) {
+          <span class="badge rounded-pill text-bg-primary px-3 py-2 fs-6">
+            Carrinho: {{ cartService.obterQuantidade() }}
+          </span>
+        }
+      </div>
+    </nav>
+  </div>
+</header>

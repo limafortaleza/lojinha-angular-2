@@ -1,0 +1,25 @@
+<div class="container my-4">
+  <div class="d-flex p-2 mb-4 justify-content-between align-items-center">
+    <h3>Catálogo de Produtos</h3>
+    <p style="font-weight: bold">{{ produtos()?.length }} produtos encontrados</p>
+  </div>
+
+  @if (carregando()) {
+    <div class="spinner-grow" role="status">
+      <span class="visually-visible"> <p>Carregando...</p></span>
+    </div>
+  } @else {
+    <div class="row g-4">
+      @for (item of produtos(); track item.id) {
+        <div class="col-12 col-md-6 col-lg-3">
+          <!-- PAI DO INPUT (filho é o card-produto) -->
+          <app-card-produto
+            [produto]="item"
+            //é do for
+            (adicionarAoCarrinho)="receberProduto($event)"
+          ></app-card-produto>
+        </div>
+      }
+    </div>
+  }
+</div>
