@@ -3,7 +3,7 @@ import { inject, Service } from '@angular/core';
 import { Observable } from 'rxjs';
 
 //REGRA DE NEGÓCIO
-export interface InterfaceProduto {
+export interface IProduto {
   id: number;
   title: string;
   price: number;
@@ -21,14 +21,14 @@ export class Produto {
   // 2. A URL oficial da API que vamos consumir
   private apiUrl = 'https://fakestoreapi.com/products';
 
-  obterProdutos(): Observable<InterfaceProduto[]> {
+  obterProdutos(): Observable<IProduto[]> {
     // 3. Faz um pedido do tipo GET e retorna um Observable
-    return this.http.get<InterfaceProduto[]>(this.apiUrl);
+    return this.http.get<IProduto[]>(this.apiUrl);
   }
 
-  getProductById(id: number): any {
+  getProductById(id: number | string): Observable<IProduto> {
     // 4. Faz um pedido do tipo GET para um produto específico
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+    return this.http.get<IProduto>(`${this.apiUrl}/${id}`);
   }
 
   //precisa tipar meu produto com a interface.

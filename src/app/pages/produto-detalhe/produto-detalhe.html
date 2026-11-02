@@ -1,0 +1,92 @@
+<div class="container my-5">
+  <!-- Navegação de Voltar -->
+  <div class="mb-4">
+    <a routerLink="/" class="text-decoration-none text-secondary">
+      &larr; Voltar para os Produtos
+    </a>
+  </div>
+
+  <!-- Estado: Carregando -->
+  @if (carregando()) {
+    <div class="text-center py-5 my-5">
+      <div
+        class="spinner-border text-primary"
+        role="status"
+        style="width: 3rem; height: 3rem"
+      ></div>
+      <p class="text-muted mt-3">Carregando informações do produto...</p>
+    </div>
+  }
+
+  <!-- Estado: Erro -->
+  @else if (erro()) {
+    <div class="alert alert-danger text-center py-5 shadow-sm rounded-3" role="alert">
+      <h4 class="alert-heading mb-3">⚠️ Oops! Algo deu errado.</h4>
+      <p class="mb-4">{{ erro() }}</p>
+      <a routerLink="/" class="btn btn-primary">Voltar para a Loja</a>
+    </div>
+  }
+
+  <!-- Estado: Produto Carregado -->
+  @else if (produto()) {
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+      <div class="row g-0">
+        <!-- Coluna da Esquerda: Imagem -->
+        <div class="col-md-6 d-flex align-items-center justify-content-center p-5 bg-light">
+          <img
+            [src]="produto()?.image"
+            [alt]="produto()?.title"
+            class="img-fluid mix-blend-multiply"
+            style="max-height: 400px; object-fit: contain"
+          />
+        </div>
+
+        <!-- Coluna da Direita: Informações -->
+        <div class="col-md-6">
+          <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center h-100">
+            <div class="mb-3">
+              <span class="badge bg-secondary text-uppercase px-2 py-1">
+                {{ produto()?.category }}
+              </span>
+            </div>
+
+            <h2 class="card-title fw-bold mb-3">{{ produto()?.title }}</h2>
+
+            <p class="card-text text-muted mb-4 fs-5" style="line-height: 1.6">
+              {{ produto()?.description }}
+            </p>
+
+            <!-- Preço em destaque -->
+            <h3 class="fw-bold text-primary mb-4">
+              {{ produto()?.price | currency: 'BRL' }}
+            </h3>
+
+            <!-- Ações (Botões) -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-3">
+              <button
+                type="button"
+                class="btn btn-success btn-lg px-4 shadow-sm"
+                (click)="adicionarAoCarrinho()"
+              >
+                Adicionar ao Carrinho
+              </button>
+              <a routerLink="/checkout" class="btn btn-outline-primary btn-lg px-4">
+                Ir para o Checkout
+              </a>
+            </div>
+
+            <!-- Feedback de Sucesso -->
+            @if (adicionado()) {
+              <div
+                class="alert alert-success mt-3 py-2 fade show border-0 border-start border-4 border-success"
+                role="alert"
+              >
+                <strong>Tudo Certo!</strong> Item adicionado ao carrinho com sucesso.
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

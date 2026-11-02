@@ -1,7 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { adicionarProduto } from '../../store/cart'; //veio da Action, pq cortamos a service
+import { IProduto, Produto } from '../../services/produto';
 import { CardProduto } from '../card-produto/card-produto';
-import { InterfaceProduto, Produto } from '../../services/produto';
-import { Carrinho } from '../../services/carrinho';
+// import { Carrinho } from '../../services/carrinho'; //A service do carrinho não serve mais.
 
 @Component({
   imports: [CardProduto],
@@ -11,7 +13,7 @@ import { Carrinho } from '../../services/carrinho';
 })
 export class ListaProdutos implements OnInit {
   //Importa a interface.
-  produtos = signal<InterfaceProduto[]>([]);
+  produtos = signal<IProduto[]>([]);
   carregando = signal(true); //assim que o componente é renderizado o componente está carregando.
 
   //Injetando a dependência (SO QUE NÃO É A FORMA MODERNA DE INJETAR A DEPENDENCIA)
@@ -19,7 +21,8 @@ export class ListaProdutos implements OnInit {
   //Importando o carrinho pra cá tb:private cartService: Carrinho
   constructor(
     private productService: Produto,
-    private cartService: Carrinho,
+    private store: Store,
+    // private cartService: Carrinho,
   ) {}
 
   ngOnInit(): void {
@@ -34,7 +37,7 @@ export class ListaProdutos implements OnInit {
     // }, 1000);
 
     this.productService.obterProdutos().subscribe({
-      next: (dadosDaApi: InterfaceProduto[]) => {
+      next: (dadosDaApi: IProduto[]) => {
         console.log('Produtos Chegaram', dadosDaApi);
         this.produtos.set(dadosDaApi);
         this.carregando.set(false);
@@ -42,14 +45,15 @@ export class ListaProdutos implements OnInit {
       error: (error: any) => {
         console.error('Opa, deu ruim!', error);
         this.carregando.set(false);
-        alert('Erro ao buscar produto');
+        alert('Ocorreu um erro ao carregar a lista de produtos!');
       },
     });
   }
 
-  receberProduto(produto: InterfaceProduto) {
-    alert(`Produto Adicionado: ${produto.title} no valor de R$ ${produto.price}`);
-    this.cartService.adicionarProduto(produto); //enviei para a service Carrinho o produto clicado (adicionado)
+  receberProduto(produto: any) {
+    // alert(`Produto Adicionado: ${produto.title} no valor de R$ ${produto.price}`);
+    this.store.dispatch(adicionarProduto({ produto }));
+    // this.cartService.adicionarProduto(produto); //enviei para a service Carrinho o produto clicado (adicionado)
     console.log('Produto recebido', produto);
   }
 }

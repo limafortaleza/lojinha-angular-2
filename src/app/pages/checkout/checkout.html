@@ -1,0 +1,223 @@
+<div class="container my-5">
+  <!-- Tela de Sucesso (Exibida apenas quando pedidoConcluido for true) -->
+  @if (pedidoConcluido()) {
+    <div class="alert alert-success text-center shadow-sm py-5" role="alert">
+      <h2 class="alert-heading mb-3">🎉 Pedido Finalizado com Sucesso!</h2>
+      <p class="fs-5">
+        Obrigado por comprar conosco, <strong>{{ nomeCliente() }}</strong
+        >.
+      </p>
+      <hr class="my-4" />
+      <p class="mb-0">
+        Seu carrinho foi esvaziado e os detalhes foram enviados para
+        <strong>{{ emailCliente() }}</strong
+        >.
+      </p>
+      <div class="mt-4">
+        <a class="btn btn-primary" routerLink="/">Voltar para a Loja</a>
+      </div>
+    </div>
+  } @else if (quantidade() === 0) {
+    <div class="text-center py-5 bg-light rounded-3 shadow-sm border px-3">
+      <h2 class="text-primary mb-3">🛒 Seu carrinho está vazio no momento</h2>
+      <p class="text-muted fs-5 mb-4">
+        Adicione alguns produtos antes de prosseguir para o pagamento.
+      </p>
+      <a class="btn btn-primary btn-lg px-4" routerLink="/">Explorar Produtos</a>
+    </div>
+  }
+  <!-- Formulário de Checkout -->
+  @else {
+    <div class="row g-5">
+      <!-- Coluna da Direita: Resumo do Carrinho -->
+      <div class="col-md-5 col-lg-4 order-md-last">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">Seu Carrinho</span>
+          <span class="badge bg-primary rounded-pill"> Total de itens: {{ quantidade() }}</span>
+        </h4>
+
+        <ul class="list-group mb-3 shadow-sm">
+          @for (item of itens(); track $index) {
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">{{ item.title }}</h6>
+              </div>
+              <span class="text-muted">{{ item.price | currency: 'BRL' }}</span>
+            </li>
+          } @empty {
+            <li class="list-group-item text-center text-muted bg-light py-3">
+              Seu carrinho está vazio.
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Coluna da Esquerda: Formulário -->
+      <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">Dados da Entrega</h4>
+
+        <form [formGroup]="checkoutForm" (ngSubmit)="finalizarPedido()">
+          <div class="row g-3">
+            <!-- campo Nome -->
+            <div class="col-sm-12">
+              <label for="nome" class="form-label">Nome Completo*</label>
+              <input
+                class="form-control"
+                id="nome"
+                type="text"
+                formControlName="nome"
+                [class.is-invalid]="isCampoInvalido('nome')"
+                placeholder="Digite seu nome completo"
+              />
+              @if (isCampoInvalido('nome')) {
+                <div class="invalid-feedback">
+                  @if (checkoutForm.get('nome')?.hasError('required')) {
+                    O nome é obrigatório.
+                  } @else if (checkoutForm.get('nome')?.hasError('minlength')) {
+                    O nome deve ter pelo menos 3 caracteres.
+                  }
+                </div>
+              }
+            </div>
+
+            <!-- Campo Email -->
+            <div class="col-12">
+              <label for="email" class="form-label">Email*</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+                placeholder="seu@email.com"
+                [class.is-invalid]="isCampoInvalido('email')"
+              />
+              @if (isCampoInvalido('email')) {
+                <div class="invalid-feedback">Insira um endereço de e-mail válido.</div>
+              }
+            </div>
+
+            <!-- CEP -->
+            <div class="col-md-4">
+              <label for="cep" class="form-label">CEP*</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cep"
+                maxlength="9"
+                formControlName="cep"
+                placeholder="00000-000"
+                [class.is-invalid]="isCampoInvalido('cep')"
+              />
+              @if (isCampoInvalido('cep')) {
+                <div class="invalid-feedback">CEP inválido (Formato: 00000000).</div>
+              }
+            </div>
+
+            <!-- Endereço -->
+            <div class="col-md-8">
+              <label for="endereco" class="form-label">Endereço Completo*</label>
+              <input
+                type="text"
+                class="form-control"
+                id="endereco"
+                formControlName="endereco"
+                placeholder="Rua, número, complemento, bairro"
+                [class.is-invalid]="isCampoInvalido('endereco')"
+              />
+              @if (isCampoInvalido('endereco')) {
+                <div class="invalid-feedback">Endereço inválido ou muito curto.</div>
+              }
+            </div>
+
+            <!-- Cidade -->
+            <div class="col-md-8">
+              <label for="cidade" class="form-label">Cidade*</label>
+              <input
+                type="text"
+                class="form-control"
+                id="cidade"
+                formControlName="cidade"
+                placeholder="Cidade"
+                [class.is-invalid]="isCampoInvalido('cidade')"
+              />
+              @if (isCampoInvalido('cidade')) {
+                <div class="invalid-feedback">Informe a cidade.</div>
+              }
+            </div>
+          </div>
+
+          <hr class="my-4" />
+
+          <!-- Opções de Pagamento -->
+          <h4 class="mb-3">Forma de Pagamento</h4>
+          <div class="my-3">
+            <label for="pagamento" class="form-label">Selecione o método de pagamento</label>
+            <select
+              id="pagamento"
+              class="form-select"
+              formControlName="pagamento"
+              [class.is-invalid]="isCampoInvalido('pagamento')"
+            >
+              <option value="cartão">Cartão de Crédito</option>
+              <option value="pix">PIX</option>
+              <option value="boleto">Boleto Bancário</option>
+            </select>
+
+            <!-- Mensagem de erro caso dê algum problema na validação -->
+            @if (isCampoInvalido('pagamento')) {
+              <div class="invalid-feedback">Selecione uma forma de pagamento.</div>
+            }
+          </div>
+
+          <!-- Checando se a forma de pagamento é "CARTÂO" -->
+
+          @if (checkoutForm.get('pagamento')?.value === 'cartão') {
+            <div class="row g-3">
+              <!-- Campo Numero do Cartão (Ocupa 8 de 12 colunas) -->
+              <div class="col-md-8">
+                <label for="numeroCartao" class="form-label">Numero do Cartão*</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="numeroCartao"
+                  maxlength="16"
+                  formControlName="numeroCartao"
+                  placeholder="Digite os 16 números do cartão"
+                  [class.is-invalid]="isCampoInvalido('numeroCartao')"
+                />
+                @if (isCampoInvalido('numeroCartao')) {
+                  <div class="invalid-feedback">O número do cartão precisa ter 16 dígitos.</div>
+                }
+              </div>
+
+              <!-- Cod segurança Numero do Cartão (Ocupa 4 de 12 colunas) -->
+              <div class="col-md-4">
+                <label for="codigoSeguranca" class="form-label">Codigo de segurança*</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="codigoSeguranca"
+                  maxlength="3"
+                  formControlName="codigoSeguranca"
+                  placeholder="123"
+                  [class.is-invalid]="isCampoInvalido('codigoSeguranca')"
+                />
+                @if (isCampoInvalido('codigoSeguranca')) {
+                  <div class="invalid-feedback">
+                    O número do código de segurança precisa ter 3 dígitos.
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
+          <hr class="my-4" />
+
+          <button class="w-100 btn btn-primary btn-lg" type="submit" [disabled]="checkoutForm.invalid">
+            Confirmar e Finalizar Compra
+          </button>
+        </form>
+      </div>
+    </div>
+  }
+</div>

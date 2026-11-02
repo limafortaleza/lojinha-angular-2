@@ -19,17 +19,18 @@
     <nav class="collapse navbar-collapse" id="menuNavegacao">
       <!-- Links -->
       <div class="navbar-nav me-auto mb-2 mb-lg-0">
-        <a class="nav-link active" aria-current="page" href="#">Início</a>
-        <a class="nav-link" href="#">Produtos</a>
-        <a class="nav-link" href="#">Sobre nós</a>
+        <a class="nav-link active" aria-current="page" routerLink="/
+          ">Início</a>
+        <a class="nav-link" routerLink="checkout">Checkout</a>
       </div>
 
       <div class="d-flex align-items-center">
-        @if (cartService.obterQuantidade() > 0) {
+        <!-- @if (quantidade() > 0) { -->
+          <button (click)="esvaziarCarrinho()" class="btn btn-sm btn-danger ms-2 m-2">Esvaziar Carrinho</button>
           <span class="badge rounded-pill text-bg-primary px-3 py-2 fs-6">
-            Carrinho: {{ cartService.obterQuantidade() }}
+            Carrinho: {{ quantidade() }}
           </span>
-        }
+        <!-- } -->
       </div>
     </nav>
   </div>

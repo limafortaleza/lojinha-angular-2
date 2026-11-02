@@ -1,25 +1,53 @@
-<div class="card h-100 shadow-sm">
-  <img
-    [src]="produto?.image"
-    class="card-img-top p-3"
-    [alt]="produto?.title"
-    style="height: 200px; object-fit: contain"
-  />
-  <div class="card-body d-flex flex-column">
-    <h5 class="card-title">{{ produto?.title | uppercase }}</h5>
-    <!-- IF DA PORCENTAGEM -->
-    @if ((produto?.price || 0) > 100) {
-      <h6 style="text-decoration:line-through">{{ produto?.price | currency: 'BRL' }}</h6>
-      <span style="font-weight: bold"> Com 15% OFF</span>
-      <h6 [ngStyle]="{ color: 'red' }">{{ produto?.price | discount:15 | currency: 'BRL' }}</h6>
-    } @else {
-      <h6 [ngStyle]="{ color: 'green' }">{{ produto?.price | currency: 'BRL' }}</h6>
-    }
-    <p class="card-text">
-      <span style="font-weight: bold">Descrição:</span>{{ produto?.description | truncate: 100 }}
-    </p>
-    <button type="button" (click)="clicouComprar()" class="btn btn-primary w-100">
-      Adicionar ao carrinho
+<div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+  <!-- Área clicável que leva para os detalhes (Imagem, Título, Descrição e Preço) -->
+  <a
+    [routerLink]="['/produto', produto?.id]"
+    class="text-decoration-none text-dark d-flex flex-column flex-grow-1"
+  >
+    <!-- Container da Imagem -->
+    <div
+      class="bg-light p-4 d-flex align-items-center justify-content-center"
+      style="height: 220px"
+    >
+      <img
+        [src]="produto?.image"
+        [alt]="produto?.title"
+        class="img-fluid mix-blend-multiply"
+        style="max-height: 100%; object-fit: contain"
+      />
+    </div>
+
+    <!-- Corpo do Card -->
+    <div class="card-body d-flex flex-column">
+      <h5 class="card-title fw-bold text-truncate" [title]="produto?.title">
+        {{ produto?.title | uppercase }}
+      </h5>
+
+      <p class="card-text text-muted small mb-3 flex-grow-1">
+        {{ produto?.description | truncate: 50 }}
+      </p>
+
+      <!-- Bloco de Preços -->
+      <div class="mt-auto">
+        @if ((produto?.price ?? 0) > 100) {
+          <span class="badge bg-success mb-2 px-2 py-1">
+            Com 15% off: {{ produto?.price | discount: 15 | currency: 'BRL' }}
+          </span>
+        }
+        <div class="fs-4 fw-bold text-primary mb-1">
+          {{ produto?.price | currency: 'BRL' }}
+        </div>
+      </div>
+    </div>
+  </a>
+
+  <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3">
+    <button
+      type="button"
+      class="btn btn-primary w-100 fw-semibold shadow-sm"
+      (click)="clicouComprar()"
+    >
+      Adicionar ao Carrinho
     </button>
   </div>
 </div>
