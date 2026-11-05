@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule, CurrencyPipe, UpperCasePipe } from '@angular/common';
-import { IProduto, Produto } from '../../services/produto';
+import { IProduto } from '../../services/produto';
 import { TruncatePipe } from '../../pipes/truncate-pipe';
 import { DiscountPipe } from '../../pipes/discount-pipe';
 import { RouterLink } from '@angular/router';
@@ -17,7 +17,6 @@ export class CardProduto {
   @Input() produto?: IProduto;
 
   //emite para o sftw inteiro do que está saindo daqui.
-  //como não sabemos  o que vem no evento colocamos o tipo any.
   //O EventEmitter é uma classe nativa do Angular responsável por gerenciar eventos.
   //Melhor tipar com o meu contrato InterfaceProduto
   @Output() adicionarAoCarrinho = new EventEmitter<IProduto>();

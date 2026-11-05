@@ -3,11 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { clearCart, selectItensCarrinho, selectQuantItens } from '../../store/cart';
+import {
+  clearCart,
+  selectItensCarrinho,
+  selectQuantItens,
+  selectSomaItens,
+} from '../../store/cart';
 import { IProduto } from '../../services/produto';
 
+import { DiscountPipe } from '../../pipes/discount-pipe';
+
 @Component({
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, DiscountPipe],
   selector: 'app-checkout',
   styleUrl: './checkout.css',
   templateUrl: './checkout.html',
@@ -19,6 +26,7 @@ export class Checkout {
   //Lendo os dados do cofre - vindos do card.selector
   quantidade = this.store.selectSignal(selectQuantItens);
   itens: Signal<IProduto[]> = this.store.selectSignal(selectItensCarrinho);
+  totalCarrinho = this.store.selectSignal(selectSomaItens);
 
   pedidoConcluido = signal(false);
 

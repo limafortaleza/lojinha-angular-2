@@ -57,9 +57,18 @@
             </p>
 
             <!-- Preço em destaque -->
-            <h3 class="fw-bold text-primary mb-4">
-              {{ produto()?.price | currency: 'BRL' }}
-            </h3>
+            @if ((produto()?.price ?? 0) > 100) {
+              <h3 class="fw-bold text-primary mb-4">
+                Preço com desconto: {{ produto()?.price | desconto: 15 | currency: 'BRL' }}
+                <small class="text-muted text-decoration-line-through fs-6 ms-2">
+                  {{ produto()?.price | currency: 'BRL' }}
+                </small>
+              </h3>
+            } @else {
+              <h3 class="fw-bold text-primary mb-4">
+                Preço: {{ produto()?.price | currency: 'BRL' }}
+              </h3>
+            }
 
             <!-- Ações (Botões) -->
             <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-3">

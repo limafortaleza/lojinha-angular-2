@@ -42,13 +42,18 @@
               <div>
                 <h6 class="my-0">{{ item.title }}</h6>
               </div>
-              <span class="text-muted">{{ item.price | currency: 'BRL' }}</span>
+              @if (item.price > 100) {
+                <span class="text-muted">{{ item.price | desconto: 15 | currency: 'BRL' }}</span>
+              }@else {
+                <span class="text-muted">{{ item.price | currency: 'BRL' }}</span>
+              }
             </li>
           } @empty {
             <li class="list-group-item text-center text-muted bg-light py-3">
               Seu carrinho está vazio.
             </li>
           }
+          <span>Total: {{ totalCarrinho() | currency: 'BRL' }}</span>
         </ul>
       </div>
 
@@ -213,7 +218,11 @@
 
           <hr class="my-4" />
 
-          <button class="w-100 btn btn-primary btn-lg" type="submit" [disabled]="checkoutForm.invalid">
+          <button
+            class="w-100 btn btn-primary btn-lg"
+            type="submit"
+            [disabled]="checkoutForm.invalid"
+          >
             Confirmar e Finalizar Compra
           </button>
         </form>

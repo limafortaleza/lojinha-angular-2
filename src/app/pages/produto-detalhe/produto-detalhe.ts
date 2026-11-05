@@ -4,9 +4,10 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Produto, IProduto } from '../../services/produto';
 import { adicionarProduto } from '../../store/cart';
+import { DiscountPipe } from '../../pipes/discount-pipe';
 
 @Component({
-  imports: [CommonModule, CurrencyPipe, RouterLink],
+  imports: [CommonModule, CurrencyPipe, RouterLink, DiscountPipe],
   selector: 'app-produto-detalhe',
   styleUrl: './produto-detalhe.css',
   templateUrl: './produto-detalhe.html',

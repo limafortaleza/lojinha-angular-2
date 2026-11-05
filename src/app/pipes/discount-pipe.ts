@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'discount',
+  name: 'desconto',
 })
 export class DiscountPipe implements PipeTransform {
   // Ajuste na tipagem para aceitar null ou undefined
-  transform(value: number | null | undefined, percentual: number = 10): number  {
+  transform(value: number | null | undefined, percentual: number = 15): number  {
     // Se não houver valor, retorna o próprio null/undefined para não quebrar a tela
     if (value === undefined || value ===null) {
       return 0;

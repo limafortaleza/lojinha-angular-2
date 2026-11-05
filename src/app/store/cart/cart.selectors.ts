@@ -14,3 +14,12 @@ export const selectItensCarrinho = createSelector(selectCartState, (state) => st
 
 // le so a quantidade total de itens no carrinho
 export const selectQuantItens = createSelector(selectCartState, (state) => state.itens.length);
+
+export const selectSomaItens = createSelector(
+  selectItensCarrinho,
+  (itens) =>
+    itens.reduce((total, item) => {
+      const precoComDesconto = item.price > 100 ? item.price * 0.85 : item.price;
+      return total + precoComDesconto;
+    }, 0)
+);
