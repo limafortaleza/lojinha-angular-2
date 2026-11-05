@@ -1,11 +1,13 @@
 <div class="container my-5">
-  <!-- Tela de Sucesso (Exibida apenas quando pedidoConcluido for true) -->
   @if (pedidoConcluido()) {
     <div class="alert alert-success text-center shadow-sm py-5" role="alert">
       <h2 class="alert-heading mb-3">🎉 Pedido Finalizado com Sucesso!</h2>
       <p class="fs-5">
         Obrigado por comprar conosco, <strong>{{ nomeCliente() }}</strong
         >.
+      </p>
+      <p class="fs-5">
+        Total da Compra:<strong>{{ valorFinalCompra() | currency: 'BRL' }} </strong>
       </p>
       <hr class="my-4" />
       <p class="mb-0">
@@ -44,7 +46,7 @@
               </div>
               @if (item.price > 100) {
                 <span class="text-muted">{{ item.price | desconto: 15 | currency: 'BRL' }}</span>
-              }@else {
+              } @else {
                 <span class="text-muted">{{ item.price | currency: 'BRL' }}</span>
               }
             </li>
@@ -53,11 +55,17 @@
               Seu carrinho está vazio.
             </li>
           }
-          <span>Total: {{ totalCarrinho() | currency: 'BRL' }}</span>
+
+          <li
+            class="list-group-item d-flex justify-content-between bg-light py-3 align-items-center"
+          >
+            <span class="fw-bold fs-5">Total</span>
+            <strong class="text-primary fs-5">{{ totalCarrinho() | currency: 'BRL' }}</strong>
+          </li>
         </ul>
       </div>
 
-      <!-- Coluna da Esquerda: Formulário -->
+      <!-- Coluna da Esquerda do Formulário -->
       <div class="col-md-7 col-lg-8">
         <h4 class="mb-3">Dados da Entrega</h4>
 
@@ -114,7 +122,7 @@
                 [class.is-invalid]="isCampoInvalido('cep')"
               />
               @if (isCampoInvalido('cep')) {
-                <div class="invalid-feedback">CEP inválido (Formato: 00000000).</div>
+                <div class="invalid-feedback">CEP inválido (Formato: 00000-000).</div>
               }
             </div>
 
@@ -178,7 +186,6 @@
 
           @if (checkoutForm.get('pagamento')?.value === 'cartão') {
             <div class="row g-3">
-              <!-- Campo Numero do Cartão (Ocupa 8 de 12 colunas) -->
               <div class="col-md-8">
                 <label for="numeroCartao" class="form-label">Numero do Cartão*</label>
                 <input
@@ -195,7 +202,6 @@
                 }
               </div>
 
-              <!-- Cod segurança Numero do Cartão (Ocupa 4 de 12 colunas) -->
               <div class="col-md-4">
                 <label for="codigoSeguranca" class="form-label">Codigo de segurança*</label>
                 <input

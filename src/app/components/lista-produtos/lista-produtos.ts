@@ -16,9 +16,6 @@ export class ListaProdutos implements OnInit {
   produtos = signal<IProduto[]>([]);
   carregando = signal(true); //assim que o componente é renderizado o componente está carregando.
 
-  //Injetando a dependência (SO QUE NÃO É A FORMA MODERNA DE INJETAR A DEPENDENCIA)
-  //Importação do bloco da Service Produto
-  //Importando o carrinho pra cá tb:private cartService: Carrinho
   constructor(
     private productService: Produto,
     private store: Store,
@@ -30,11 +27,6 @@ export class ListaProdutos implements OnInit {
   }
 
   carregarProdutos(): void {
-    //Simulação do carregamento de vitrine
-    // setTimeout(() => {
-    //   this.produtos = this.productService.arrayDeProdutos;
-    //   this.carregando.set(false);
-    // }, 1000);
 
     this.productService.obterProdutos().subscribe({
       next: (dadosDaApi: IProduto[]) => {
@@ -51,9 +43,8 @@ export class ListaProdutos implements OnInit {
   }
 
   receberProduto(produto: any) {
-    // alert(`Produto Adicionado: ${produto.title} no valor de R$ ${produto.price}`);
+    alert(`Produto Adicionado: ${produto.title}`);
     this.store.dispatch(adicionarProduto({ produto }));
-    // this.cartService.adicionarProduto(produto); //enviei para a service Carrinho o produto clicado (adicionado)
     console.log('Produto recebido', produto);
   }
 }

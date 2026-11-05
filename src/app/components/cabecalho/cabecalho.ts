@@ -12,14 +12,12 @@ import { RouterLink } from '@angular/router';
   templateUrl: './cabecalho.html',
 })
 export class Cabecalho {
-  //trazer o carrinho para cá, pq eu quero exibir no meu cabeçalho o método de Obter quantidade da service carrinho
-  // constructor(public cartService:Carrinho){}
   private store = inject(Store);
 
   //Lendo o cofre
   quantidade = this.store.selectSignal(selectQuantItens);
 
-   esvaziarCarrinho(): void {
-     this.store.dispatch(clearCart())
+  esvaziarCarrinho(): void {
+    this.store.dispatch(clearCart());
   }
 }

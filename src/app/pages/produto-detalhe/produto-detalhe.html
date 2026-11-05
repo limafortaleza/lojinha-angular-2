@@ -43,58 +43,70 @@
 
         <!-- Coluna da Direita: Informações -->
         <div class="col-md-6">
-          <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center h-100">
-            <div class="mb-3">
-              <span class="badge bg-secondary text-uppercase px-2 py-1">
-                {{ produto()?.category }}
-              </span>
-            </div>
+  <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-center h-100">
+    <div class="mb-3">
+      <span class="badge bg-secondary text-uppercase px-2 py-1">
+        {{ produto()?.category }}
+      </span>
+    </div>
 
-            <h2 class="card-title fw-bold mb-3">{{ produto()?.title }}</h2>
+    <h2 class="card-title fw-bold mb-2">{{ produto()?.title }}</h2>
 
-            <p class="card-text text-muted mb-4 fs-5" style="line-height: 1.6">
-              {{ produto()?.description }}
-            </p>
+    <!-- Avaliação (Rating: Rate e Count) -->
+    @if (produto()?.rating) {
+      <div class="d-flex align-items-center mb-3">
+        <span class="badge bg-warning text-dark me-2 px-2 py-1 fs-6 align-items-center d-inline-flex gap-1">
+          ⭐ {{ produto()?.rating?.rate }}
+        </span>
+        <span class="text-muted small">
+          ({{ produto()?.rating?.count }} avaliações)
+        </span>
+      </div>
+    }
 
-            <!-- Preço em destaque -->
-            @if ((produto()?.price ?? 0) > 100) {
-              <h3 class="fw-bold text-primary mb-4">
-                Preço com desconto: {{ produto()?.price | desconto: 15 | currency: 'BRL' }}
-                <small class="text-muted text-decoration-line-through fs-6 ms-2">
-                  {{ produto()?.price | currency: 'BRL' }}
-                </small>
-              </h3>
-            } @else {
-              <h3 class="fw-bold text-primary mb-4">
-                Preço: {{ produto()?.price | currency: 'BRL' }}
-              </h3>
-            }
+    <p class="card-text text-muted mb-4 fs-5" style="line-height: 1.6">
+      {{ produto()?.description }}
+    </p>
 
-            <!-- Ações (Botões) -->
-            <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-3">
-              <button
-                type="button"
-                class="btn btn-success btn-lg px-4 shadow-sm"
-                (click)="adicionarAoCarrinho()"
-              >
-                Adicionar ao Carrinho
-              </button>
-              <a routerLink="/checkout" class="btn btn-outline-primary btn-lg px-4">
-                Ir para o Checkout
-              </a>
-            </div>
+    <!-- Preço em destaque -->
+    @if ((produto()?.price ?? 0) > 100) {
+      <h3 class="fw-bold text-primary mb-4">
+        Preço com desconto: {{ produto()?.price | desconto: 15 | currency: 'BRL' }}
+        <small class="text-muted text-decoration-line-through fs-6 ms-2">
+          {{ produto()?.price | currency: 'BRL' }}
+        </small>
+      </h3>
+    } @else {
+      <h3 class="fw-bold text-primary mb-4">
+        Preço: {{ produto()?.price | currency: 'BRL' }}
+      </h3>
+    }
 
-            <!-- Feedback de Sucesso -->
-            @if (adicionado()) {
-              <div
-                class="alert alert-success mt-3 py-2 fade show border-0 border-start border-4 border-success"
-                role="alert"
-              >
-                <strong>Tudo Certo!</strong> Item adicionado ao carrinho com sucesso.
-              </div>
-            }
-          </div>
-        </div>
+    <!-- Ações (Botões) -->
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start mb-3">
+      <button
+        type="button"
+        class="btn btn-success btn-lg px-4 shadow-sm"
+        (click)="adicionarAoCarrinho()"
+      >
+        Adicionar ao Carrinho
+      </button>
+      <a routerLink="/checkout" class="btn btn-outline-primary btn-lg px-4">
+        Ir para o Checkout
+      </a>
+    </div>
+
+    <!-- Feedback de Sucesso -->
+    @if (adicionado()) {
+      <div
+        class="alert alert-success mt-3 py-2 fade show border-0 border-start border-4 border-success"
+        role="alert"
+      >
+        <strong>Tudo Certo!</strong> Item adicionado ao carrinho com sucesso.
+      </div>
+    }
+  </div>
+</div>
       </div>
     </div>
   }

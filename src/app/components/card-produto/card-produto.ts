@@ -12,17 +12,13 @@ import { RouterLink } from '@angular/router';
   templateUrl: './card-produto.html',
 })
 export class CardProduto {
-  //Faço o input da interface? Não sabia!!!
-  //Componente FILHO do PAI(lista-produtos.html)
+
   @Input() produto?: IProduto;
 
-  //emite para o sftw inteiro do que está saindo daqui.
-  //O EventEmitter é uma classe nativa do Angular responsável por gerenciar eventos.
-  //Melhor tipar com o meu contrato InterfaceProduto
+
   @Output() adicionarAoCarrinho = new EventEmitter<IProduto>();
 
-  //instanciar a partir do EventEmitter, que tá escutando um evento, através da propriedade "adicionar" eu capturo no metodo clicouComprar() o que vou emitir:"this.produto"
-
+  
   clicouComprar(): void {
     this.adicionarAoCarrinho.emit(this.produto); //envia um unico objeto, o objeto clicado.
     console.log('Produto enviado', this.produto);
